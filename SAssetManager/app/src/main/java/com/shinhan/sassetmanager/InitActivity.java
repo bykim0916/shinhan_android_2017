@@ -11,9 +11,9 @@ import android.util.Log;
 public class InitActivity extends AppCompatActivity {
 
     Toolbar toolbar;
-    Fragment fragment1;
-    Fragment fragment2;
-    Fragment fragment3;
+    FundListFragment fundListFragment;
+    MyAssetListFragment myAssetListFragment;
+    EventListFragment eventListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +26,11 @@ public class InitActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
 
-        fragment1 = new Fragment();
-        fragment2 = new Fragment();
-        fragment3 = new Fragment();
+        fundListFragment = new FundListFragment();
+        myAssetListFragment = new MyAssetListFragment();
+        eventListFragment = new EventListFragment();
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment1).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fundListFragment).commit();
 
         TabLayout tabs = (TabLayout)findViewById(R.id.tabs);
         tabs.addTab(tabs.newTab().setText("펀드관리"));
@@ -45,11 +45,12 @@ public class InitActivity extends AppCompatActivity {
 
                 Fragment selected = null;
                 if (position == 0) {
-                    selected = fragment1;
+                    selected = fundListFragment;
                 } else if (position == 1) {
-                    selected = fragment2;
-                } else if (position == 2) {
-                    selected = fragment3;
+                    selected = myAssetListFragment;
+                }
+                else if (position == 2) {
+                    selected = eventListFragment;
                 }
 
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, selected).commit();

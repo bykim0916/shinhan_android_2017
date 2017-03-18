@@ -51,18 +51,6 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:id="@+id/container">
 
-            <fragment
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/fragment1"
-                android:name="com.shinhan.sassetmanager.FundListFragment"/>
-
-            <fragment
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/fragment2"
-                android:name="com.shinhan.sassetmanager.MyAssetListFragment"/>
-
 
         </FrameLayout>
 
