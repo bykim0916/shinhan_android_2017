@@ -21,20 +21,28 @@
         android:id="@+id/location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
         android:layout_centerInParent="true"/>
     <Button
         android:id="@+id/tour"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="투어"
-        android:visibility="invisible"
+        android:text="영업점방문"
+        android:visibility="visible"
         android:layout_above="@+id/worldMap"
         android:onClick="onTourButtonClicked"/>
     <Button
-        android:id="@+id/worldMap"
+        android:id="@+id/other"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="다른곳"
+        android:visibility="invisible"
+        android:layout_above="@+id/tour"
+        android:onClick="onOtherButtonClicked"/>
+    <Button
+        android:id="@+id/worldMap"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="invisible"
         android:text="월드맵보기"
         android:layout_alignParentBottom="true"
         android:onClick="onWorldMapButtonClicked"/>
@@ -47,6 +55,6 @@
         android:layout_marginLeft="160dp"
         android:visibility="invisible"
         android:onClick="onImageViewClicked"
-        android:background="@mipmap/ic_launcher"/>
+        android:background="@mipmap/ic_sunny"/>
 
 </RelativeLayout>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <!--이미지,제목,날짜 표시 영역-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/iconItem"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@mipmap/ic_sunny"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/imagelati"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="위도" />
+                <TextView
+                    android:id="@+id/imagelongi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="경도" />
+                <TextView
+                    android:id="@+id/eventdate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="eventdate" />
+            <!--
+                <TextView
+                    android:id="@+id/eventtime"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:text="eventtime" />
+            -->
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!--
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/iconItem"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@mipmap/ic_sunny"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <TextView
+                android:id="@+id/memberid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="memberid"
+                android:visibility="invisible"
+                android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/imageid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:text="imageid"
+                android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/membername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:text="membername"
+                android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/memberscore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:text="memberscore"
+                android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/eventg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:text="eventg"
+                android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/imagescore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:text="imagescore"
+                android:textSize="20sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/imagelati"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    android:text="위도" />
+                <TextView
+                    android:id="@+id/imagelongi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    android:text="경도" />
+                <TextView
+                    android:id="@+id/eventdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    android:text="eventdate" />
+                <TextView
+                    android:id="@+id/eventtime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    android:layout_alignParentRight="true"
+                    android:text="eventtime" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+    -->
+</LinearLayout>

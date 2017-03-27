@@ -8,18 +8,21 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="hello_blank_fragment3" />
+        android:text="hello_blank_fragment3"
+        android:visibility="invisible"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="내위치확인하기"
+        android:visibility="invisible"
         android:onClick="startLocationService"/>
     <TextView
         android:id="@+id/location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"
+        android:visibility="invisible"
         android:layout_centerInParent="true"/>
     <Button
         android:id="@+id/tour"
@@ -27,6 +30,7 @@
         android:layout_height="wrap_content"
         android:text="투어"
         android:layout_above="@+id/worldMap"
+        android:visibility="invisible"
         android:onClick="onTourButtonClicked"/>
     <Button
         android:id="@+id/worldMap"
@@ -34,6 +38,7 @@
         android:layout_height="wrap_content"
         android:text="월드맵보기"
         android:layout_alignParentBottom="true"
+        android:visibility="invisible"
         android:onClick="onWorldMapButtonClicked"/>
 
 </FrameLayout>

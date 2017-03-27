@@ -134,7 +134,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textSize="20sp"
-                    android:text="S퇴직연금 로그인" />
+                    android:text="써니찾기 이벤트 로그인" />
             </LinearLayout>
 
             <LinearLayout

@@ -37,11 +37,14 @@ public class SunnySearchActivity extends AppCompatActivity {
     SupportMapFragment supportMapFragment;
     GoogleMap googleMap;
     int curIndex = 0;
+    int curIndex2 = 0;
     boolean visibleFlag = false;
-    String gImageId = "";
-    double gImageLati = 0.0;
-    double gImageLongi = 0.0;
+    String[] gImageId;
+    double[] gImageLati;
+    double[] gImageLongi;
     int gImageCount = 0;
+    int gSelImageIndex;
+    int gSelImageCount;
 
     class MyMarker {
         String name;
@@ -66,11 +69,22 @@ public class SunnySearchActivity extends AppCompatActivity {
             new MyMarker("나의위치", new LatLng(37.662325, 126.770711))
     };
 
+    MyMarker[] markers2 = {
+
+            new MyMarker("다른곳1", new LatLng(37.752851, 126.774624)),
+            new MyMarker("다른곳2", new LatLng(37.764287, 126.783786)),
+            new MyMarker("다른곳3", new LatLng(37.750527, 126.778106)),
+            new MyMarker("다른곳4", new LatLng(37.753869, 126.789951)),
+
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sunny_search);
 
+        //이벤트 이미지 목록 조회
+        searchEventImage();
 
         supportMapFragment = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
         supportMapFragment.getMapAsync(new OnMapReadyCallback() {
@@ -149,9 +163,9 @@ public class SunnySearchActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "GPS 권한 승인!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "GPS 권한 승인!", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "GPS 권한 거부!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "GPS 권한 거부!", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -165,8 +179,8 @@ public class SunnySearchActivity extends AppCompatActivity {
             location.setLongitude(126.770700);
 
             if (location != null) {
-                TextView textView = (TextView) findViewById(R.id.location);
-                textView.setText("내위치 : " + location.getLatitude() + " , 경도 : " + location.getLongitude());
+                //TextView textView = (TextView) findViewById(R.id.location);
+                //textView.setText("내위치 : " + location.getLatitude() + " , 경도 : " + location.getLongitude());
 
                 LatLng curPoint = new LatLng(location.getLatitude(), location.getLongitude());
                 if (googleMap != null) {
@@ -183,7 +197,7 @@ public class SunnySearchActivity extends AppCompatActivity {
             Location curLocation = new Location(LocationManager.GPS_PROVIDER);
             curLocation.setLatitude(location.getLatitude());
             curLocation.setLongitude(location.getLongitude());
-
+/*
             SAssetManageDatabaseHelper sAssetManageDatabaseHelper = new SAssetManageDatabaseHelper(SunnySearchActivity.this);
             SQLiteDatabase database = sAssetManageDatabaseHelper.getReadableDatabase();
 
@@ -229,6 +243,7 @@ public class SunnySearchActivity extends AppCompatActivity {
             Cursor cursor2 = database.rawQuery(sqlSelect, null);
 
             Log.i("count2" , "##############"+cursor2.getCount()+"");
+            Log.i("query" , "##############"+sqlSelect+"");
 
             if (cursor2.getCount() == 0) {
                 visibleFlag = true;
@@ -237,6 +252,7 @@ public class SunnySearchActivity extends AppCompatActivity {
                 visibleFlag = false;
                 //imageView.setVisibility(ImageView.INVISIBLE);
             }
+            */
 /*
             //현재위치와 영업점 사이의 거리가 가까우면 이미지를 보여줌
             for (int j = 0 ; j < markers.length ; j++) {
@@ -293,16 +309,69 @@ public class SunnySearchActivity extends AppCompatActivity {
         public void onLocationChanged(Location location) {
             double latitude = location.getLatitude();    //위도
             double longitude = location.getLongitude();  //경도
-            TextView textView = (TextView)findViewById(R.id.location);
-            textView.setText("내위치 : " + latitude + " , " + longitude);
-            Toast.makeText(SunnySearchActivity.this, "위도:" + latitude + " , 경도:" + longitude, Toast.LENGTH_LONG).show();
+            //TextView textView = (TextView)findViewById(R.id.location);
+            //textView.setText("내위치 : " + latitude + " , " + longitude);
+            //Toast.makeText(SunnySearchActivity.this, "위도:" + latitude + " , 경도:" + longitude, Toast.LENGTH_SHORT).show();
 
             LatLng curPoint = new LatLng(latitude, longitude);
             if (googleMap != null) {
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(curPoint, 15));
             }
 
+
+            //현재위치와 가까운 이미지가 있고 해당 이미지를 한번도 클릭한 적 없으면 보여줌
+            ImageView imageView = (ImageView)findViewById(R.id.imageview);
+
+            Log.i("imageList", "################==>" + gImageId.toString() + "");
+
+            for (int i = 0 ; i < gImageCount ; i++) {
+                Location imageLocation = new Location(LocationManager.GPS_PROVIDER);
+                imageLocation.setLatitude(gImageLati[i]);
+                imageLocation.setLongitude(gImageLongi[i]);
+
+                double distance = location.distanceTo(imageLocation);
+                if (distance > -100 && distance < 100) {
+                    gSelImageIndex = i;
+                    gSelImageCount = 1;
+                    break;
+                }
+
+                Log.i("gSelImageCount", "################==>" + gSelImageCount + "");
+                Log.i("distance", "################==>" + distance + "");
+                Log.i("curLocation", "################==>" + location.getLatitude() + ", " + location.getLongitude());
+                Log.i("imageLocation", "################==>" + imageLocation.getLatitude() + ", " + imageLocation.getLongitude());
+            }
+
+            if (gSelImageCount == 0) {     //현재위치와 가까운 이미지가 없으면
+                visibleFlag = false;
+                imageView.setVisibility(ImageView.INVISIBLE);
+            } else {
+
+                SAssetManageDatabaseHelper sAssetManageDatabaseHelper = new SAssetManageDatabaseHelper(SunnySearchActivity.this);
+                SQLiteDatabase database = sAssetManageDatabaseHelper.getReadableDatabase();
+                String memberId = "bykim0916";
+                String sqlSelect = "" +
+                        "select * " +
+                        "from event_his a " +
+                        "where a.member_id = '" + memberId + "' " +
+                        "  and a.image_id = " + gImageId[gSelImageIndex] + " ";
+                Cursor cursor2 = database.rawQuery(sqlSelect, null);
+
+                Log.i("count2", "##############" + cursor2.getCount() + "");
+                Log.i("query", "##############" + sqlSelect + "");
+
+                if (cursor2.getCount() == 0) {
+                    visibleFlag = true;
+                    imageView.setVisibility(ImageView.VISIBLE);
+                } else {
+                    visibleFlag = false;
+                    imageView.setVisibility(ImageView.INVISIBLE);
+                }
+
+            }
+
             //현재위치와 영업점 사이의 거리가 가까우면 이미지를 보여줌
+            /*
             ImageView imageView = (ImageView)findViewById(R.id.imageview);
             Location curLocation = new Location(LocationManager.GPS_PROVIDER);
             curLocation.setLatitude(latitude);
@@ -322,6 +391,7 @@ public class SunnySearchActivity extends AppCompatActivity {
                 Log.i("curLocation", "################==>" + curLocation.getLatitude() + ", " + curLocation.getLongitude());
                 Log.i("bankLocation", "################==>" + bankLocation.getLatitude() + ", " + bankLocation.getLongitude());
             }
+            */
         }
 
         @Override
@@ -348,31 +418,210 @@ public class SunnySearchActivity extends AppCompatActivity {
     }
 
     public void onTourButtonClicked(View v) {
-
+        gSelImageCount = 0;
         if (curIndex > markers.length - 1) {
             curIndex = 0;
         }
 
+        Toast.makeText(SunnySearchActivity.this, markers[curIndex].name, Toast.LENGTH_LONG);
+
         if (googleMap != null) {
-            googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markers[curIndex++].latLng, 17));
+            googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markers[curIndex].latLng, 15));
 
             //현재위치와 영업점 사이의 거리가 가까우면 이미지를 보여줌
+            /*
             ImageView imageView = (ImageView)findViewById(R.id.imageview);
             if (visibleFlag && googleMap.getMapType() == GoogleMap.MAP_TYPE_SATELLITE ) {
                 imageView.setVisibility(ImageView.VISIBLE);
             } else {
                 imageView.setVisibility(ImageView.INVISIBLE);
             }
+            */
+        }
+
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            Location location = new Location(LocationManager.GPS_PROVIDER);
+            location.setLatitude(markers[curIndex].latLng.latitude);
+            location.setLongitude(markers[curIndex].latLng.longitude);
+
+            if (location != null) {
+                //TextView textView = (TextView) findViewById(R.id.location);
+                //textView.setText("내위치 : " + location.getLatitude() + " , 경도 : " + location.getLongitude());
+
+                LatLng curPoint = new LatLng(location.getLatitude(), location.getLongitude());
+                if (googleMap != null) {
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(curPoint, 17));
+                }
+
+                //Toast.makeText(SunnySearchActivity.this, "Last Known Location 위도:" + location.getLatitude() + " , 경도:" + location.getLongitude(), Toast.LENGTH_LONG).show();
+            }
+
+            GPSListener gpsListener = new GPSListener();
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, gpsListener);
+
+            //현재위치와 가까운 이미지가 있고 해당 이미지를 한번도 클릭한 적 없으면 보여줌
+            ImageView imageView = (ImageView)findViewById(R.id.imageview);
+
+            Log.i("imageList", "################==>" + gImageId.toString() + "");
+
+            for (int i = 0 ; i < gImageCount ; i++) {
+                Location imageLocation = new Location(LocationManager.GPS_PROVIDER);
+                imageLocation.setLatitude(gImageLati[i]);
+                imageLocation.setLongitude(gImageLongi[i]);
+
+                double distance = location.distanceTo(imageLocation);
+                if (distance > -100 && distance < 100) {
+                    gSelImageIndex = i;
+                    gSelImageCount = 1;
+                    break;
+                }
+
+                Log.i("gSelImageCount", "################==>" + gSelImageCount + "");
+                Log.i("distance", "################==>" + distance + "");
+                Log.i("curLocation", "################==>" + location.getLatitude() + ", " + location.getLongitude());
+                Log.i("imageLocation", "################==>" + imageLocation.getLatitude() + ", " + imageLocation.getLongitude());
+            }
+
+            if (gSelImageCount == 0) {     //현재위치와 가까운 이미지가 없으면
+                visibleFlag = false;
+                imageView.setVisibility(ImageView.INVISIBLE);
+            } else {
+
+                SAssetManageDatabaseHelper sAssetManageDatabaseHelper = new SAssetManageDatabaseHelper(SunnySearchActivity.this);
+                SQLiteDatabase database = sAssetManageDatabaseHelper.getReadableDatabase();
+                String memberId = "bykim0916";
+                String sqlSelect = "" +
+                        "select * " +
+                        "from event_his a " +
+                        "where a.member_id = '" + memberId + "' " +
+                        "  and a.image_id = " + gImageId[gSelImageIndex] + " ";
+                Cursor cursor2 = database.rawQuery(sqlSelect, null);
+
+                Log.i("count2", "##############" + cursor2.getCount() + "");
+                Log.i("query", "##############" + sqlSelect + "");
+
+                if (cursor2.getCount() == 0) {
+                    visibleFlag = true;
+                    imageView.setVisibility(ImageView.VISIBLE);
+                } else {
+                    visibleFlag = false;
+                    imageView.setVisibility(ImageView.INVISIBLE);
+                }
+
+            }
+/*
+            //현재위치와 영업점 사이의 거리가 가까우면 이미지를 보여줌
+            for (int j = 0 ; j < markers.length ; j++) {
+                Location bankLocation = new Location(LocationManager.GPS_PROVIDER);
+                bankLocation.setLatitude(markers[j].latLng.latitude);
+                bankLocation.setLongitude(markers[j].latLng.longitude);
+                double distance = curLocation.distanceTo(bankLocation);
+                if (distance > -10 && distance < 10) {
+                    visibleFlag = true;
+                    //imageView.setVisibility(ImageView.VISIBLE);
+                } else {
+                    visibleFlag = false;
+                    //imageView.setVisibility(ImageView.INVISIBLE);
+                }
+
+                //현재위치와 영업점 사이의 거리가 가까우면 이미지를 보여줌
+                if (visibleFlag && googleMap.getMapType() == GoogleMap.MAP_TYPE_SATELLITE ) {
+                    imageView.setVisibility(ImageView.VISIBLE);
+                } else {
+                    imageView.setVisibility(ImageView.INVISIBLE);
+                }
+
+            */
+        }
+
+        curIndex++;
+    }
+
+    public void onOtherButtonClicked(View v) {
+
+        if (curIndex2 > markers2.length - 1) {
+            curIndex2 = 0;
+        }
+
+        Toast.makeText(SunnySearchActivity.this, markers2[curIndex2].name, Toast.LENGTH_LONG);
+
+        if (googleMap != null) {
+            //googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markers2[curIndex2++].latLng, 17));
+
+            //현재위치와 영업점 사이의 거리가 가까우면 이미지를 보여줌
+            /*
+            ImageView imageView = (ImageView)findViewById(R.id.imageview);
+            if (visibleFlag && googleMap.getMapType() == GoogleMap.MAP_TYPE_SATELLITE ) {
+                imageView.setVisibility(ImageView.VISIBLE);
+            } else {
+                imageView.setVisibility(ImageView.INVISIBLE);
+            }
+            */
         }
     }
 
     public void onImageViewClicked(View v) {
-        Toast.makeText(SunnySearchActivity.this, "축하드립니다. 고객님의 써니점수는 7 점 입니다.", Toast.LENGTH_LONG).show();
+
+        SAssetManageDatabaseHelper sAssetManageDatabaseHelper = new SAssetManageDatabaseHelper(SunnySearchActivity.this);
+        SQLiteDatabase database1 = sAssetManageDatabaseHelper.getReadableDatabase();
+        String memberId = "bykim0916";
+        String sqlSelect3 = "" +
+                "select member_score " +
+                "from member " +
+                "where member_id = '" + memberId + "' " ;
+        Cursor cursor3 = database1.rawQuery(sqlSelect3, null);
+        cursor3.moveToNext();
+
+        Log.i("count3", "##############" + cursor3.getCount() + "");
+        Log.i("query3", "##############" + sqlSelect3 + "");
+
+        String congMessage = "축하드립니다. 고객님의 써니점수는 " + (cursor3.getInt(0) + 1) + " 점 입니다.";
+        Toast.makeText(SunnySearchActivity.this, congMessage, Toast.LENGTH_LONG).show();
+
+        //이력 저장
+        SQLiteDatabase database = sAssetManageDatabaseHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("member_id", "bykim0916");
+        values.put("image_id", gImageId[gSelImageIndex]);
+        values.put("event_date", "20170327");
+        values.put("event_time", "151134");
+        database.insert(SAssetManageDatabaseHelper.TABLE_NAME_EVENT_HIS, null, values);   //DB에 데이터 insert
+
+        //점수 업데이트
+        SQLiteDatabase database2 = sAssetManageDatabaseHelper.getWritableDatabase();
+        ContentValues values2 = new ContentValues();
+        values2.put("member_score", (cursor3.getInt(0) + 1));
+        String[] whereArgs = {"bykim0916"};
+        int rowAffected = database2.update(SAssetManageDatabaseHelper.TABLE_NAME_MEMBER, values2, "member_id = ?", whereArgs );   //DB에 데이터 update
+
+        Log.i("rowAffected", "#############==>" + rowAffected);
 
         //이미지 클릭시 사라지게 함
         ImageView imageView = (ImageView)findViewById(R.id.imageview);
         visibleFlag = false;
         imageView.setVisibility(ImageView.INVISIBLE);
+    }
+
+    //이벤트 이미지 목록을 DB에서 조회한다.
+    public void searchEventImage() {
+        SAssetManageDatabaseHelper sAssetManageDatabaseHelper = new SAssetManageDatabaseHelper(SunnySearchActivity.this);
+        SQLiteDatabase database = sAssetManageDatabaseHelper.getReadableDatabase();
+
+        Cursor cursor = database.rawQuery("select * from " + SAssetManageDatabaseHelper.TABLE_NAME_EVENT_IMAGE, null);
+        gImageCount = cursor.getCount();
+        gImageId = new String[gImageCount];
+        gImageLati = new double[gImageCount];
+        gImageLongi = new double[gImageCount];
+
+        for (int i = 0 ; i < gImageCount ; i++) {
+            cursor.moveToNext();
+            gImageId[i] = String.valueOf(cursor.getInt(0));
+            gImageLati[i] = cursor.getDouble(1);
+            gImageLongi[i] = cursor.getDouble(2);
+        }
     }
 }

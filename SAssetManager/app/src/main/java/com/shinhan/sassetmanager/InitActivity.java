@@ -20,6 +20,9 @@ public class InitActivity extends AppCompatActivity {
     MyAssetListFragment myAssetListFragment;
     EventListFragment eventListFragment;
 
+    ImageManageFragment imageManageFragment;
+    EventHistSearchFragment eventHistSearchFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,12 +38,15 @@ public class InitActivity extends AppCompatActivity {
         myAssetListFragment = new MyAssetListFragment();
         eventListFragment = new EventListFragment();
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fundListFragment).commit();
+        imageManageFragment = new ImageManageFragment();
+        eventHistSearchFragment = new EventHistSearchFragment();
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, imageManageFragment).commit();
 
         TabLayout tabs = (TabLayout)findViewById(R.id.tabs);
-        tabs.addTab(tabs.newTab().setText("펀드관리"));
-        tabs.addTab(tabs.newTab().setText("자산관리"));
-        tabs.addTab(tabs.newTab().setText("이벤트관리"));
+        tabs.addTab(tabs.newTab().setText("이미지관리"));
+        tabs.addTab(tabs.newTab().setText("이력관리"));
+        tabs.addTab(tabs.newTab().setText("써니찾기"));
 
         tabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -50,9 +56,9 @@ public class InitActivity extends AppCompatActivity {
 
                 Fragment selected = null;
                 if (position == 0) {
-                    selected = fundListFragment;
+                    selected = imageManageFragment;
                 } else if (position == 1) {
-                    selected = myAssetListFragment;
+                    selected = eventHistSearchFragment;
                 }
                 else if (position == 2) {
 
